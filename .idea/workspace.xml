@@ -83,7 +83,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Int4.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Int4.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/SoloClass/Int4.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
@@ -93,6 +93,19 @@
                 <element signature="e#114#115#0" expanded="true" />
                 <element signature="e#158#159#0" expanded="true" />
                 <element signature="e#188#189#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Return.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/SoloClass/Return.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding>
+                <element signature="e#81#82#0" expanded="true" />
+                <element signature="e#115#116#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -130,10 +143,11 @@
         <option value="$PROJECT_DIR$/src/SoloClass/SayHello2.java" />
         <option value="$PROJECT_DIR$/src/SoloClass/Stringname.java" />
         <option value="$PROJECT_DIR$/src/SoloClass/Int4.java" />
+        <option value="$PROJECT_DIR$/src/SoloClass/Return.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -234,7 +248,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Int4">
+  <component name="RunManager" selected="Application.Return">
     <configuration name="Int4" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -254,14 +268,14 @@
       <module name="L1" />
       <envs />
     </configuration>
-    <configuration name="SayHello" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Return" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="SoloClass.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="SoloClass.SayHello" />
+      <option name="MAIN_CLASS_NAME" value="SoloClass.Return" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -412,19 +426,19 @@
       <listeners />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Application.SayHello" />
-      <item index="1" class="java.lang.String" itemvalue="Application.Training" />
-      <item index="2" class="java.lang.String" itemvalue="Application.SayHello2" />
-      <item index="3" class="java.lang.String" itemvalue="Application.Stringname" />
-      <item index="4" class="java.lang.String" itemvalue="Application.Int4" />
+      <item index="0" class="java.lang.String" itemvalue="Application.Training" />
+      <item index="1" class="java.lang.String" itemvalue="Application.SayHello2" />
+      <item index="2" class="java.lang.String" itemvalue="Application.Stringname" />
+      <item index="3" class="java.lang.String" itemvalue="Application.Int4" />
+      <item index="4" class="java.lang.String" itemvalue="Application.Return" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.Int4" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Stringname" />
-        <item index="2" class="java.lang.String" itemvalue="Application.SayHello2" />
-        <item index="3" class="java.lang.String" itemvalue="Application.Training" />
-        <item index="4" class="java.lang.String" itemvalue="Application.SayHello" />
+        <item index="0" class="java.lang.String" itemvalue="Application.Return" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Int4" />
+        <item index="2" class="java.lang.String" itemvalue="Application.Stringname" />
+        <item index="3" class="java.lang.String" itemvalue="Application.SayHello2" />
+        <item index="4" class="java.lang.String" itemvalue="Application.Training" />
       </list>
     </recent_temporary>
   </component>
@@ -445,7 +459,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -499,7 +513,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -613,19 +629,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/SoloClass/Training.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding>
-            <element signature="e#72#73#0" expanded="true" />
-            <element signature="e#112#113#0" expanded="true" />
-            <element signature="e#157#158#0" expanded="true" />
-            <element signature="e#177#178#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/SoloClass/SayHello.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -661,6 +664,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/SoloClass/Training.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <element signature="e#72#73#0" expanded="true" />
+            <element signature="e#112#113#0" expanded="true" />
+            <element signature="e#157#158#0" expanded="true" />
+            <element signature="e#177#178#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/SoloClass/Int4.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -670,6 +686,17 @@
             <element signature="e#114#115#0" expanded="true" />
             <element signature="e#158#159#0" expanded="true" />
             <element signature="e#188#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/SoloClass/Return.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="e#81#82#0" expanded="true" />
+            <element signature="e#115#116#0" expanded="true" />
           </folding>
         </state>
       </provider>
