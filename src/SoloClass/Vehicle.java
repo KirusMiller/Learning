@@ -11,3 +11,9 @@ public class Vehicle {
         System.out.println("Beep!");
     }
 }
+
+class BMW {
+    public static void main(String[] args) {
+        Vehicle obj = new Vehicle();
+    }
+}
