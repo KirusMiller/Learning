@@ -1,6 +1,6 @@
 package SoloClass;
 
-public class Motobike {
+public class Motorbike {
     private int maxSpeek;
     private int wheels;
     private String colour;
@@ -28,9 +28,9 @@ public class Motobike {
     }
 }
 
-class Programm {
+class RunMotorbike {
     public static void main(String[] args){
-        Motobike v1 = new Motobike();
+        Motorbike v1 = new Motorbike();
         v1.setColour("Red");
         v1.setWheels(2);
         System.out.println(v1.getColour());
