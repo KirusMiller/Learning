@@ -1,10 +1,13 @@
 package SoloClass;
 
-public class Training {
-    public static void Hi() {
+public class TestA {
+    public void test() {
         System.out.println("Hi");
     }
+}
+class B {
     public static void main(String[] args) {
-        Hi();
+        TestA obj = new TestA();
+        obj.test();
     }
 }
