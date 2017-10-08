@@ -17,15 +17,15 @@ class Person2 {
 
 public class John3 {
 
-<<<<<<< HEAD
+
     static void change(Person v) {
-        System.out.println(v.getAge());
-=======
+        System.out.println(v.getAge()); }
+
     /*Ссылочные переменные не содержат данных, они отправляют на место в коде. Объявляются Имя_класса переменная*/
     /*Person g ниже - ссылка на класс- а не на объект*/
 
 
-    static void c(Person c){// принимает объект Person в качествве параметра, и инкрементирует его атрибут
+     static void c (Person c){// принимает объект Person в качествве параметра, и инкрементирует его атрибут
         c.setAge(c.getAge()+10);
     }
     public static void main(String[] args) {
@@ -48,6 +48,6 @@ public class John3 {
         System.out.println(I.getAge());
 
 // 30,40,20
->>>>>>> 80ea28cb48452a4c8b0a11740f6963f1f6fe0e29
+
     }
 }
