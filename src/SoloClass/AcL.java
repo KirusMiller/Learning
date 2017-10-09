@@ -5,13 +5,13 @@ package SoloClass;
  */
 
 class AcL {
-    public AcL(){
+    public AcL(){//конструктор
         System.out.println("New A");
     }
 }
 
 class AcM extends AcL{
-    public AcM(){
+    public AcM(){//конструктор
         System.out.println("New B");
     }
 }
