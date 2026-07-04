@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Kiryl brand mark — serif K in a ring, with a breakthrough area-chart ascent.
+  Navy ring + K; navy tonal gradient fill; signal-blue rising line + point.
+  NOTE: the "K" is set in Fraunces 900 via <text>; for a portable production
+  asset, outline it to a <path> (so the mark renders without the font present).
+  Colours: navy #22407A · signal #2E6BE6 · paper ground #EFEEEA.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="256" height="256" role="img" aria-label="Kiryl monogram">
+  <defs>
+    <linearGradient id="kg" gradientUnits="userSpaceOnUse" x1="0" y1="9" x2="0" y2="22">
+      <stop offset="0" stop-color="#22407A" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#22407A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="29.6" fill="none" stroke="#22407A" stroke-width="1.7"/>
+  <path d="M38.5 21.2 L45 15.4 L51.8 10 L51.8 21.2 Z" fill="url(#kg)"/>
+  <text x="29" y="35" text-anchor="middle" dominant-baseline="central"
+        font-family="Fraunces, Georgia, serif" font-weight="900" font-size="33" fill="#22407A">K</text>
+  <polyline points="38.5,21.2 45,15.4 51.8,10" fill="none" stroke="#2E6BE6"
+            stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="51.8" cy="10" r="5.4" fill="#EFEEEA"/>
+  <circle cx="51.8" cy="10" r="3.3" fill="#2E6BE6"/>
+</svg>
