@@ -24,12 +24,19 @@ need a call the user must make, list it, don't guess.
 1. **`docs/ppc-portfolio-plan.md`** (this repo, branch
    `claude/ppc-portfolio-website-plan-qgs83f`) — the full brief: positioning,
    audiences, IA, reuse map, tools, and the design system in **§9a**. Read it whole.
-2. **`docs/brand/kiryl-mark.svg`** — the brand mark (K-in-ring + area-chart ascent).
-3. **Working design reference (lift code from it):**
+2. **`docs/brand/`** — the complete, **self-contained brand kit** (nothing
+   ephemeral; see `docs/brand/README.md`):
+   - `kiryl-mark.svg` — the mark (K-in-ring + breakthrough area-chart ascent).
+   - `tokens.css` — brand color + font tokens, theme-aware.
+   - `fonts/faces.css` (data-URI, drop-in) **or** `fonts/fonts.css` + `fonts/*.woff2`
+     (file-based) — the embedded fonts. **Use these; do not fetch fonts from a CDN.**
+   - `identity-reference.html` — a full working render of the identity (lockup,
+     mark variants, favicon sizes, homepage mock, palette + type). **Lift the
+     tokens, the mark `<symbol>`, the motif, and component CSS from here verbatim.**
+   - Heed the README's gotchas (esp. SVG gradient stops must use `currentColor`).
+3. *(Optional preview)* rendered identity artifact —
    `https://claude.ai/code/artifact/028a5270-92e9-4561-8e45-4d4d5fdadfbc`
-   — WebFetch it. It's production-ready HTML/CSS/SVG with the **embedded fonts**,
-   the exact **color tokens**, the **mark** (as an inline `<symbol>`), and the
-   **area-chart motif**. Reuse these verbatim rather than re-designing.
+   (same content as `identity-reference.html`; the repo copy is canonical).
 4. **Reference codebase:** `kirusmiller/bb` (aka `lashwarszawa-pl`) — the Next.js
    16 static-export multilingual site whose architecture we mirror. Add it with
    `add_repo` if it isn't in your session; read its `CLAUDE.md`.
@@ -86,7 +93,7 @@ Home, Cases, Tools (4 client-side calculators), Blog ("Log"), About, Contact.
 
 ---
 
-## 5. Design system (summary — full spec in plan §9a, code in the artifact)
+## 5. Design system (summary — full spec in plan §9a, code in `docs/brand/`)
 
 - **Register:** modern **but moneyed** — reads as *serious money* to PL/EU/US.
   Navy anchor = cross-market finance trust; a signal-blue trendline is the motif.
