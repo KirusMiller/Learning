@@ -38,9 +38,8 @@ differentiator across all four segments.
 
 - Maps almost 1:1 onto Alina's existing i18n (`app/[lang]/…`, typed locale
   files, hreflang, per-locale content). We **drop Ukrainian**, keep the machinery.
-- Decide the **default locale / bare-`/` redirect**: Alina redirects `/` → `/pl/`.
-  For an internationally-targeted personal brand, **EN is likely the better
-  default** (`/` → `/en/`). *Open decision.*
+- **Default locale = EN** (decided). Bare `/` → `/en/` (Alina redirects to `/pl/`;
+  we change the target). Fits the international, US+EU-facing personal brand.
 
 ---
 
@@ -115,11 +114,9 @@ export each → import as Next.js route/components (Vite router → App Router).
 - **Prefer client-side processing.** Amazon report CSVs crunched in the browser
   = no server, no API key, and **the client's data never leaves their machine**
   (a real trust selling point — say so on the page). Compatible with static export.
-- **AI/Gemini insight features** (if any tool auto-writes recommendations) are
-  the *only* part that needs a server-side key. Options: (a) a small Vercel
-  serverless function for just that endpoint (site stays mostly static), or
-  (b) ship AI features as an optional layer, or (c) omit at launch.
-  **→ Action: flag which tools call an AI API.**
+- **No AI APIs** (decided). All four tools are pure client-side CSV processing —
+  so the **entire site stays a static export**: no server, no API keys, no
+  secrets, minimal hosting cost. Confirmed for launch scope.
 - Tools double as **lead magnets** — inline "want the full breakdown / talk to
   me" capture on each.
 
@@ -148,8 +145,9 @@ Primary CTA is **direct message**, not calendar booking. Alina's WhatsApp CTA
 pattern (`CTALinks`, `FloatingButtons`, prefilled links in `lib/links.ts`)
 transfers directly.
 
-**→ Open item: which channels?** (email · LinkedIn · Telegram · WhatsApp ·
-lightweight contact form). Recommend 2–3 max, with a persistent floating button.
+**Channels (decided): email · WhatsApp · LinkedIn.** Persistent floating
+button (reuse `FloatingButtons`) + a contact page. Prefilled WhatsApp link via
+`lib/links.ts` pattern.
 
 ---
 
@@ -160,12 +158,17 @@ lightweight contact form). Recommend 2–3 max, with a persistent floating butto
   duplicate content across ccTLDs hurts rankings.
 - Geo + language is won the way Alina already does it: **one domain +
   `hreflang` (en/ru/pl) + Search Console international targeting.**
-- **Domain choice:** `Kiryl.pl` is owned. `.pl` signals "Poland" to US/global
-  clients — since American/European reach is an explicit goal, consider
-  **`kiryl.com` / `kiryl.io` as the primary**, with `Kiryl.pl` **301-redirecting**
-  to it. A keyword domain, if bought, should only **redirect** to the canonical
-  site — never host a second copy.
-  → *Open decision: canonical domain.*
+- **Domain choice (shortlisted, 2026-07-04):** `Kiryl.pl` is owned; `kiryl.com`
+  and `kiryl.io` are **taken**. Availability checked via Vercel:
+  - **`kirylppc.com` — $11.25/yr — recommended canonical.** Name + keyword,
+    `.com` trust, self-explanatory; reinforces "Kiryl = PPC" on every impression.
+  - `kiryl.pro` — $4.99/yr — short, name-pure, "professional" signal; good vanity
+    redirect (or alt primary).
+  - `kiryl.eu` — available but buy off-Vercel (~€5); matches the "sell in Europe"
+    wedge but reads Europe-only.
+  - Avoid `kirylamazon.com` (Amazon trademark risk).
+  - Any extra domain should **301-redirect** to the canonical — never host a copy.
+  → *Pending: purchase decision (user to buy; not auto-purchased).*
 
 ---
 
@@ -178,16 +181,29 @@ Alina's skeleton — not a fork of the lash content.
 
 ---
 
-## 10. Open questions (resolve before / during full plan)
+## 10. Decisions & remaining items
 
-1. **Default locale** — `/` → `/en/` (recommended) or `/pl/`?
-2. **Canonical domain** — keep `Kiryl.pl`, or make `kiryl.com`/`.io` primary?
-3. **Contact channels** — which 2–3 for "message me"?
-4. **AI features** — do any tools call Gemini/an AI API (→ needs server key)?
-5. **Brand look** — reuse Alina's warm aesthetic, or a distinct
-   professional-services identity (the personal brand probably wants its own)?
-6. **Launch scope** — do all 4 tools ship at launch, or phase them in?
-7. **Testimonials** — are named/logo'd client quotes available, or anonymized?
+**Resolved (2026-07-04):**
+
+1. **Default locale** — **EN** (`/` → `/en/`).
+2. **Canonical domain** — recommend **`kirylppc.com`** ($11.25); `kiryl.com`/`.io`
+   taken. *Purchase pending user action.*
+3. **Contact channels** — **email · WhatsApp · LinkedIn.**
+4. **AI features** — **none**; all tools client-side → fully static site.
+5. **Brand look** — **distinct design** (not Alina's aesthetic). *Brainstorm pending.*
+6. **Launch scope / tools** — **migrate one-by-one, rebuilding as needed**;
+   phase them in rather than all-at-once.
+7. **Testimonials & cases** — **anonymized.**
+
+**Still open:**
+
+- **A. Design direction** — mood/references for the distinct identity (color,
+  type, tone). Needed before Phase 1 styling. *(Consider: clean, data/analytics-
+  forward, credible — dashboards, charts, hard numbers.)*
+- **B. Domain purchase** — buy `kirylppc.com` (+ optional `kiryl.pro`) to lock it.
+- **C. Tool migration order** — which of the 4 goes first?
+- **D. Contact details** — actual email address, WhatsApp number, LinkedIn URL
+  for `lib/config.ts`.
 
 ---
 
