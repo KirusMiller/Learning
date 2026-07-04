@@ -181,6 +181,48 @@ Alina's skeleton — not a fork of the lash content.
 
 ---
 
+## 9a. Design system — Direction A×C "Bold Editorial" (locked 2026-07-04)
+
+Chosen for the two stated goals: **name recognition** (from Direction C) +
+**big-money trust** (from Direction A). Tools are commoditized, so the identity
+is *not* built around them (Direction B dropped).
+
+**Thesis:** marketing pages are **bold and confident**; case studies and the log
+read like a **credible research report**. Grotesque-meets-serif expresses
+"bold + trustworthy" in the type itself.
+
+**Color tokens** (define as CSS custom properties, theme-aware light/dark):
+
+| Role | Light | Notes |
+|---|---|---|
+| `--bg` (cool paper) | `#EEF0F3` | credibility neutral, cool not cream |
+| `--surface` | `#FFFFFF` | cards / report surfaces |
+| `--ink` (text) | `#111827` | deep navy-black |
+| `--muted` | `#5B6472` | secondary text |
+| `--brand` (accent) | `#2438F2` | electric cobalt — the ownable brand color |
+| `--good` (data ↑) | `#0E7C5A` | profit-green — **data only**, never the brand accent |
+| `--bad` (data ↓) | `#C2402F` | muted red |
+| `--line` | `#DEE2E8` | hairline rules |
+
+Dark: `--bg #0B0D12`, `--surface #14171E`, `--ink→text #EDEFF4`,
+`--brand #6D82FF`, `--good #3FB57F`, `--muted #98A0AE`, `--line #232833`.
+(Give the accent + semantic colors real contrast on both grounds — don't invert.)
+
+**Type roles** (inline as `@font-face` data URIs — CSP blocks font CDNs):
+
+| Role | Face (candidates) | Use |
+|---|---|---|
+| Display | heavy grotesque — Neue Montreal / Clash Display / General Sans | headlines, the KIRYL name |
+| Editorial | transitional serif — Source Serif / Lyon | case studies, log body, pull-quotes |
+| Body / UI | clean grotesque, regular | interface + short copy |
+| Figures | mono — IBM Plex Mono | metrics, tabular numbers (`tabular-nums`) |
+
+**Layout:** big statement hero → editorial, rule-lined proof set in serif with
+tabular P&L numbers. Generous space. One accent, used sparingly.
+Semantic (good/warning/bad) is separate from the brand accent.
+
+---
+
 ## 10. Decisions & remaining items
 
 **Resolved (2026-07-04):**
@@ -190,20 +232,20 @@ Alina's skeleton — not a fork of the lash content.
    taken. *Purchase pending user action.*
 3. **Contact channels** — **email · WhatsApp · LinkedIn.**
 4. **AI features** — **none**; all tools client-side → fully static site.
-5. **Brand look** — **distinct design** (not Alina's aesthetic). *Brainstorm pending.*
+5. **Brand look** — **Direction A×C "Bold Editorial"** (locked): C's bold
+   personal-brand identity + A's research-report credibility. See §9a.
 6. **Launch scope / tools** — **migrate one-by-one, rebuilding as needed**;
    phase them in rather than all-at-once.
 7. **Testimonials & cases** — **anonymized.**
 
 **Still open:**
 
-- **A. Design direction** — mood/references for the distinct identity (color,
-  type, tone). Needed before Phase 1 styling. *(Consider: clean, data/analytics-
-  forward, credible — dashboards, charts, hard numbers.)*
-- **B. Domain purchase** — buy `kirylppc.com` (+ optional `kiryl.pro`) to lock it.
-- **C. Tool migration order** — which of the 4 goes first?
-- **D. Contact details** — actual email address, WhatsApp number, LinkedIn URL
+- **A. Domain purchase** — buy `kirylppc.com` (+ optional `kiryl.pro`) to lock it.
+- **B. Tool migration order** — which of the 4 goes first?
+- **C. Contact details** — actual email address, WhatsApp number, LinkedIn URL
   for `lib/config.ts`.
+- **D. Production fonts** — confirm the grotesque + serif pairing (§9a) so we can
+  inline them as `@font-face` data URIs (CSP blocks font CDNs).
 
 ---
 
