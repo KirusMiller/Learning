@@ -1,8 +1,10 @@
-# Kiryl PPC portfolio — implementation plan (v1, for approval)
+# Kiryl PPC portfolio — implementation plan (v1.1, for approval)
 
 > Produced by Fable 5 from `docs/fable5-handoff.md` + `docs/ppc-portfolio-plan.md`
 > + `docs/brand/` + a live read of `kirusmiller/bb` (cloned at `e26aa5c`).
 > Status: **awaiting approval — no site code written, no repo created.**
+> v1.1: self-review pass — twelve weak spots found and amended (changelog in §16).
+> Target repo: **`kirusmiller/KK`** (named by user 2026-07-04).
 >
 > Locked decisions (handoff §3) and the brand identity are treated as settled and
 > reused as-is. Everything below either implements them or flags a delta explicitly.
@@ -175,7 +177,8 @@ kirylppc/                                # TODO(kiryl): real repo name
 │  ├─ validate-content.mjs               # bb + cases rules + TODO(kiryl) gate (§5.3)
 │  └─ publish-post.mjs                   # bb, paths adjusted
 ├─ docs/                                 # brand kit + briefs + this plan (canonical home)
-├─ vercel.json                           # "/" → 308 → "/en/" + bb's security headers
+├─ .github/workflows/ci.yml              # bb verbatim: typecheck→lint→validate:content→test→build on PR+main (W10)
+├─ vercel.json                           # "/" → 308 → "/en/" + bb's security headers (+ X-Robots-Tag noindex until launch — W7)
 ├─ next.config.js                        # output:'export', images.unoptimized, trailingSlash (bb verbatim)
 ├─ package.json                          # bb deps − GTM bits + papaparse; scripts identical to bb
 └─ tsconfig / eslint (jsx-a11y) / postcss # bb verbatim
@@ -259,15 +262,20 @@ Search Term report — format as of `TODO(date)`"** note) wrapping the
 2. **Parse:** `lib/tools/csv.ts` — PapaParse, header row detection, BOM strip,
    delimiter sniffing (DE/FR exports can be `;`-separated with comma decimals),
    currency-symbol strip, number normalization. Size guard (warn > ~20MB).
-3. **Validate:** required columns checked against the §5.4 contract → a clear
-   "missing columns: X, Y — is this the Search Term report?" error, never a crash
+3. **Map & validate (W1):** headers matched against a **multilingual alias table**
+   — an EU seller's Search Term report arrives with **German/French/Italian/
+   Spanish/Polish column headers**, not English ones. Auto-match where possible;
+   when it fails, a **manual column-mapping step** (dropdown per required column)
+   instead of a dead end. Only then the §5.4 contract check → a clear "missing
+   columns: X, Y — is this the Search Term report?" error, never a crash
    (explicit DoD item).
-4. **Analyze:** pure functions from `lib/tools/search-terms.ts`. Exact feature set
-   is ported from the Lovable source **when you provide it** (input #4); the shell,
-   contract, and pipeline don't depend on it. Expected shape (from the tool's
-   purpose): summary tiles, wasted-spend table (spend, zero orders), match-type
-   breakdown, top converters, negative-keyword candidates with a `.txt`/`.csv`
-   download.
+4. **Analyze:** pure functions from `lib/tools/search-terms.ts`. The SP Search
+   Term report format is standard and public, so **v1 is built clean-room from
+   the §5.4 contract** and validated against one real sample CSV from you; the
+   Lovable export, when it arrives, is a *feature-parity reference*, not a
+   blocker (W6). Expected shape (from the tool's purpose): summary tiles,
+   wasted-spend table (spend, zero orders), match-type breakdown, top
+   converters, negative-keyword candidates with a `.txt`/`.csv` download.
 5. **CTA:** results footer — "Want this run on your whole account? **Message me.**"
    (D8: no email capture at MVP.)
 
@@ -378,8 +386,12 @@ Roughly consistent with the brief's ~60/40 reuse estimate.
   React. **Vitest against a real anonymized fixture CSV.** Reviewable math is the
   §9.1 mitigation.
 - **CSV in `lib/tools/csv.ts`** — one shared, tested normalization layer
-  (PapaParse + BOM/delimiter/decimal/currency handling). Every "tool showed a wrong
-  number" class of bug funnels through one tested module.
+  (PapaParse + BOM/delimiter/decimal/currency handling + the multilingual
+  header-alias table, W1). Every "tool showed a wrong number" class of bug
+  funnels through one tested module.
+- **Fixture privacy (W9):** never commit a client's raw report — search terms and
+  ASINs identify the account. Fixtures are **synthesized** to match real structure
+  (including a DE-header, `;`-separated, comma-decimal variant).
 - **UI in `components/tools/<Tool>.tsx`** — the only `'use client'` surface; loaded
   only on its own route (D1). Brand components, not shadcn (D4).
 - **Page shell is a server component** — SEO text, format-as-of date, privacy note.
@@ -401,7 +413,10 @@ Roughly consistent with the brief's ~60/40 reuse estimate.
 - At MVP, `locales/ru.ts` and `locales/pl.ts` **re-export `en`** with a loud
   comment — the type machinery stays exercised (missing-key-fails-build works from
   day one), there's exactly one copy source, and nothing half-translated can leak
-  (those locales are never generated).
+  (those locales are never generated). **Guard (W10):** a vitest unit test asserts
+  that static params, sitemap entries, and hreflang alternates contain **only**
+  `LAUNCHED_LOCALES` — the alias trick is safe exactly as long as that stays true,
+  so CI enforces it rather than trusting it.
 - **x-default → `/en/`** (bb points at `/pl/`; our default is EN — locked §3).
 - Untranslated-page fallback (§15): adopted as specified — a page exists in a
   locale only when its content does; no empty shells, no machine translation.
@@ -414,13 +429,21 @@ Roughly consistent with the brief's ~60/40 reuse estimate.
 
 ## 9. Design-system implementation notes
 
-- **Tokens:** `docs/brand/tokens.css` values become the Tailwind v4 `@theme` block
-  in `app/globals.css` (bb convention), keeping the raw custom properties for the
-  theme-toggle path (`prefers-color-scheme` + `data-theme` override, both
-  directions — the tokens file already models this).
+- **Tokens (single source — W11):** `tokens.css` is imported as-is into
+  `globals.css`, and the Tailwind v4 `@theme` block **references its variables**
+  (`--color-navy: var(--navy)`, …) instead of restating hex values — no drift
+  between the brand kit and the utility classes, and the `data-theme` toggle path
+  keeps working through the same custom properties.
+- **Contrast rule (W8, verified by calculation):** `--signal` `#2E6BE6` on
+  `--paper` is ≈ **4.2:1 — fails WCAG AA for body-size text**. Codified usage:
+  signal is for **graphics and large text only** (the trendline, points, oversized
+  metrics); body-size text links use `--navy` (≈ 8.7:1). A contrast check on both
+  themes is a P1 DoD item, not a launch-time surprise.
 - **Fonts:** `fonts/fonts.css` (file-based) → `app/fonts.css` + `public/fonts/`;
   preload the two above-the-fold faces (Bricolage 800, Fraunces 900). No CDN, no
-  `next/font`. Anton ships but stays reserved.
+  `next/font`. Anton ships but stays reserved. **CLS (W12):** `font-display: swap`
+  on a typographic hero shifts layout — define `size-adjust`ed local fallback
+  metrics for the two display faces at P1 (Lighthouse ≥90 depends on it).
 - **Mark:** lift the `<symbol>` from `identity-reference.html` into `Mark.tsx`;
   **gradient stops via `currentColor`** (the recorded gotcha); flat variant for
   `icon.svg`/favicons (≤16px = no gradient); **outline the Fraunces K to a `<path>`**
@@ -436,8 +459,13 @@ Roughly consistent with the brief's ~60/40 reuse estimate.
 
 ## 10. Proposed locks for the §15 open items
 
-1. **Analytics:** Vercel Analytics + Speed Insights, cookieless. `cta_click`
-   events with `{channel, page}` props. No GTM/GA4 at launch (D7).
+1. **Analytics:** Vercel Analytics + Speed Insights, cookieless. No GTM/GA4 at
+   launch (D7). **Caveat (W2): custom events (`track()`) require Vercel Pro** —
+   on Hobby you get pageviews only. So: all event calls go through the
+   `lib/analytics.ts` facade (swappable backend), launch measurement works on
+   **pageviews + strict UTM discipline** alone, and upgrading to Pro (or adding
+   a cookieless Plausible/GoatCounter) is a config change we make only if the
+   §11.5 data hunger is real. Your Vercel plan tier: `TODO(kiryl)` — tell me.
 2. **Consent:** no cookie banner (nothing non-essential sets cookies); a short
    `/en/privacy/`-style note in the footer explaining exactly that. (I'll verify
    the final dependency list stays cookieless at P5 — if anything changes, consent
@@ -472,6 +500,12 @@ communities + referrals**, with SEO as the slow compounding layer. So:
 | SEO (compounding) | Log posts + tool pages catch bottom-funnel queries | The site itself |
 
 ### 11.2 Operating loop (sustainable for one person)
+
+**Starts at P0, not at launch (W3).** The site is not a prerequisite for posting —
+waiting for it wastes the 2–4 build weeks. Day one of the build: optimize the
+LinkedIn profile (headline "Amazon PPC · EU marketplaces", featured section —
+site link added at launch) and begin the cadence, so the launch announcement
+lands on a warmed audience instead of a cold one.
 
 Everything derives from client work you're already doing — no "content ideas" step:
 
@@ -521,9 +555,10 @@ actually converts, which decides the next locale and the next tool.
   pick **one** next locale, not both. (PL favors audience #1 peers/referral
   network; RU favors audience #4 clients. Data decides; RU carries the font caveat
   §1.2-P3 and the walled-content rule from §9.1.)
-- **Named proof:** by P5, ask 1–2 past clients for a named quote or a LinkedIn
+- **Named proof:** the ask goes out **at P0** (it takes calendar time, not build
+  time — W5): 1–2 past clients asked for a named quote or a LinkedIn
   recommendation (verifiable because it links a real person) — one named proof
-  outweighs every anonymous stat on the site.
+  outweighs every anonymous stat on the site. Target: landed by P5.
 - **Tool #2** ships only after tool #1 shows usage (else the effort goes to cases/
   content instead).
 
@@ -537,18 +572,35 @@ no console errors · no lorem/`TODO(kiryl)` in shipped copy · keyboard focus +
 reduced-motion respected · light & dark pass contrast · Lighthouse mobile ≥90
 perf/SEO/best-practices, ≥95 a11y.
 
-### P0 — Bootstrap (blocked on: repo name)
+### P0 — Bootstrap (repo: `kirusmiller/KK`, private until launch — W12)
 Create repo → commit docs/brand + briefs + this plan → scaffold config skeleton
-(package/tsconfig/eslint/next.config/vercel.json from bb) → Vercel project linked.
-**DoD:** empty-shell build + preview deploy green.
+(package/tsconfig/eslint/next.config/vercel.json from bb) → **CI workflow from
+bb's `ci.yml`** (typecheck/lint/validate/test/build on PR+main — W10) → Vercel
+project linked → **noindex until launch** (X-Robots-Tag in `vercel.json` +
+`robots.ts` disallow, flipped by a `LAUNCHED` flag at P5 — W7, so TODO-laden
+previews can never get indexed).
+**In parallel, the non-code critical path starts (W3/W4/W5):**
+- **`docs/INTAKE.md`** — one structured questionnaire covering inputs #3–#7 + #9
+  in a single pass, instead of per-phase trickle. You fill it once; the build
+  stops waiting.
+- **Domain purchase moved here from P5 (W4):** buy `kirylppc.com` (~$11) now —
+  `CONFIG.DOMAIN` is real from the first commit (no absolute-URL churn across
+  canonical/hreflang/JSON-LD/sitemap), the name is protected, Search Console
+  history starts early. DNS cutover to production still happens at P5.
+- **LinkedIn cadence + named-proof ask begin** (§11.2, §11.6).
+**DoD:** empty-shell build + preview deploy green, CI green on the first PR,
+preview responds with `X-Robots-Tag: noindex`, intake sent.
 
 ### P1 — Scaffold (est. ~1 day)
 Tokens→`@theme`; fonts self-hosted + preloads; `Mark`/`Wordmark`/favicon set (flat
 mark, outlined K); `[lang]` layout with metadata/hreflang/JSON-LD skeleton;
 Header/Footer/MobileDrawer/FloatingButtons; ThemeToggle + pre-paint script;
 `/`→`/en/` redirect; locales/config/links/analytics libs; empty-state pages for all
-routes. **DoD (handoff):** EN shell renders end-to-end; nav+footer+mark+favicons;
-theme toggle works both ways; preview live.
+routes; the locale-emission guard test (§8); font fallback metrics for the display
+faces (W12); mobile type scale defined (the identity mock is desktop-only — W12).
+**DoD (handoff):** EN shell renders end-to-end; nav+footer+mark+favicons; theme
+toggle works both ways; **contrast checked on both themes incl. the W8 link rule**;
+preview live.
 
 ### P2 — Content spine (est. ~1–2 days + your inputs)
 Home hero + CTA band (ResultsBar built, **flag off** until numbers); About;
@@ -564,18 +616,23 @@ cases authored. **DoD (handoff):** ≥2 cases render from frontmatter with
 before→after; index lists correctly (filters deferred per D6 — noting this DoD
 delta against the handoff's "filters work").
 
-### P4 — Tool #1: search-terms (est. ~2–3 days once source received)
-Audit Lovable export → extract math to `lib/tools/search-terms.ts` + fixture tests
-→ `csv.ts` layer → `SearchTermsTool` UI → tools hub → homepage teaser → analytics
-events. **DoD (handoff):** end-to-end on a real sample CSV, fully client-side
-(verified: no network calls during use), malformed input → clear error, math
-unit-tested, privacy + format-as-of notes visible. (Lead-capture embed deferred
-per D8 — flagged as a DoD delta.)
+### P4 — Tool #1: search-terms (est. ~2–3 days; needs one real sample CSV, not
+the full export — W6)
+`csv.ts` layer (delimiter/decimal/currency + multilingual header aliases + manual
+mapping fallback — W1) → clean-room `lib/tools/search-terms.ts` from the §5.4
+contract + synthesized fixtures incl. a DE-header variant (W9) → `SearchTermsTool`
+UI → tools hub → homepage teaser → analytics events (via the W2 facade). When the
+Lovable export arrives it's audited for feature parity, not ported wholesale.
+**DoD (handoff):** end-to-end on a real sample CSV, fully client-side (verified:
+no network calls during use), malformed input → clear error, math unit-tested,
+privacy + format-as-of notes visible. (Lead-capture embed deferred per D8 —
+flagged as a DoD delta.)
 
 ### P5 — Polish / SEO / launch (est. ~1–2 days)
 hreflang + sitemap validated (EN-only emission checked); JSON-LD passes Rich
 Results tests; OG image; robots/llms.txt final; privacy note; Lighthouse pass;
-domain purchase → canonical + `kiryl.pl` 301 + Search Console; **launch = §11
+**DNS cutover** to the canonical domain (bought at P0 — W4) + `kiryl.pl` 301 +
+Search Console; flip the `LAUNCHED` flag (noindex off — W7); **launch = §11
 content event** (LinkedIn announcement + tool post), not a silent deploy.
 **DoD (handoff):** all §14 P5 items + one named-proof ask made (§11.6).
 
@@ -614,16 +671,20 @@ with a verified case).
 
 ## 14. Inputs needed from you (mapped to what they block)
 
+All of #2–#7 and #9 are collected **once, at P0, via `docs/INTAKE.md`** (W5) —
+not per-phase.
+
 | # | Input | Blocks | Notes |
 |---|---|---|---|
-| 1 | **New repo name** (e.g. `kirusmiller/kirylppc`) | P0 — everything | You said you'll provide it with approval |
-| 2 | **Domain decision** — buy `kirylppc.com` (+`kiryl.pro`?) | P5 canonical/redirects only | Until then: Vercel preview URL; `CONFIG.DOMAIN` carries a TODO |
+| 1 | **New repo name** | — | ✅ **`kirusmiller/KK`** (provided). Private until launch unless you say otherwise (W12) |
+| 2 | **Domain purchase** — `kirylppc.com` (+`kiryl.pro`?) | P0 config (W4 — moved up from P5) | ~$11; buy it yourself or authorize me to check availability again and guide the purchase — I won't buy without an explicit go |
 | 3 | **Contact details** — email, WhatsApp number, LinkedIn URL | P2 Contact going live | Build proceeds with TODOs; page can't pass DoD without them |
 | 4 | **Results-bar numbers** — spend managed, avg ACOS cut, avg ROAS (real, defensible) | Homepage results bar (stays hidden) | Flag flips only with real values |
 | 5 | **2 case studies' real data** — before/after + context + timeline | P3 content | I structure/write; numbers are yours |
 | 6 | **About substance** — experience, credentials, marketplaces, photo | P2 About | |
-| 7 | **Tool order confirmation + the Lovable/AI-Studio export** for tool #1 (search-terms recommended) + one real sample CSV | P4 | Dayparting: also confirm its input source (Amendment B) |
+| 7 | **One real sample Search-Term CSV** (anonymization handled my side per W9) + tool order confirmation | P4 | The full Lovable export is now optional/parity-reference (W6). Dayparting: confirm its input source (Amendment B) |
 | 8 | *(post-MVP)* ESP provider preference | Post-MVP capture | No rush (D8) |
+| 9 | **Vercel plan tier** (Hobby or Pro?) + current LinkedIn profile URL/state | P0 analytics decision (W2) + §11.2 kickoff | Pro unlocks custom events; Hobby = pageviews+UTM at launch |
 
 ---
 
@@ -634,6 +695,36 @@ with a verified case).
 - [ ] **C.** §15 locks as proposed (§10)
 - [ ] **D.** Distribution & content strategy incl. the cadence floor and the RU/PL + tool-#2 gates (§11)
 - [ ] **E.** Phase plan + DoD incl. the two flagged DoD deltas (§12)
-- [ ] **F.** The new repo name (input #1) → unblocks P0/P1
+- [x] **F.** The new repo name → **`kirusmiller/KK`** (provided 2026-07-04)
+- [ ] **G.** The v1.1 self-review amendments W1–W12 (§16) — esp. W3/W4/W5
+      (distribution + domain + intake move to P0) and W7 (noindex until launch)
 
 Anything rejected: say the letter and the change; the plan is versioned in this file.
+
+---
+
+## 16. v1.1 self-review — weak spots found in v1, and their fixes
+
+Requested before scaffolding: an honest pass over my own plan. Twelve findings,
+each already folded into the sections above (marked `W#` in place). Severity:
+H = would have hurt the outcome, M = would have cost a rework round, L = hygiene.
+
+| # | Sev | Weak spot in v1 | Fix (where applied) |
+|---|---|---|---|
+| **W1** | **H** | **The launch tool would have failed its core audience.** I specced delimiter/decimal handling but missed that EU sellers' Search Term reports ship with **localized column headers** (German, French, Polish…). An "EU marketplaces" specialist's tool erroring on German reports is the §9.1 credibility risk realized on day one. | Multilingual header-alias table + manual column-mapping fallback UI in `csv.ts`; DE-header fixture in the test suite (§4.5, §7, P4) |
+| **W2** | M | **The measurement plan quietly assumed a paid feature.** `track()` custom events need Vercel Pro; on Hobby, §11.5's `cta_click {channel}` data doesn't exist. | Analytics facade so the backend is swappable; launch works on pageviews+UTM; tier = input #9 (§10.1, §14) |
+| **W3** | **H** | **Distribution was sequenced after the build** — the plan criticized the brief for treating the site as the strategy, then had LinkedIn start at launch anyway. 2–4 build weeks of audience-warming wasted. | Cadence + profile optimization start at P0; launch post lands on a warmed audience (§11.2, P0) |
+| **W4** | M | **Domain at P5 meant absolute-URL churn.** hreflang, JSON-LD, sitemap, canonicals all bake `CONFIG.DOMAIN` in — building four phases on a TODO domain invites a find-and-replace release. $11 buys it now. | Purchase moved to P0; DNS cutover stays P5 (§12-P0, §14 #2) |
+| **W5** | **H** | **The real critical path is your inputs, and v1 let them trickle per phase.** Six separate asks across five phases = the schedule dies by a thousand waits. Also the named-proof ask (calendar time, not build time) sat at P5. | `docs/INTAKE.md` — one structured questionnaire at P0; named-proof ask at P0 (§12-P0, §11.6, §14) |
+| **W6** | M | **P4 hard-blocked on the Lovable export** — a dependency on an artifact nobody has inspected, for a report format that's public and standard. | Clean-room build from the §5.4 contract; needs only one real sample CSV; export demoted to parity reference (§4.5, §12-P4, §14 #7) |
+| **W7** | M | **The honesty gate had a hole: public previews.** "No TODO ships" was enforced at launch, but TODO-laden Vercel previews are public URLs that can be crawled — placeholder metrics indexed under his name is exactly the §9 failure mode. | `X-Robots-Tag: noindex` + `robots.ts` disallow until a `LAUNCHED` flag flips at P5; repo private until launch (§3, §12-P0) |
+| **W8** | M | **A locked-palette color fails accessibility in a way the DoD would only catch late.** Computed it: `--signal` on `--paper` ≈ 4.2:1 — under the 4.5:1 AA floor for body text. The Lighthouse ≥95 a11y gate would have bounced P2 pages back to P1. | Usage rule codified: signal = graphics/large only; text links = navy (≈8.7:1); contrast check added to P1 DoD (§9) |
+| **W9** | M | **Fixture privacy unaddressed.** "Test against a real sample CSV" committed verbatim would publish a client's search terms and ASINs — identifying data — in a public repo. | Fixtures synthesized from real structure; the user-supplied sample stays out of git (§7, §14 #7) |
+| **W10** | M | **The plan invoked "CI" without defining it — and missed that `bb` already has `ci.yml`.** The reuse map claimed completeness and omitted `.github/` entirely. Also the ru/pl-alias trick (§8) had no guard against a future bug leaking EN copy onto `/ru/` URLs. | `ci.yml` mirrored verbatim into the tree + P0 DoD; locale-emission unit test added (§3, §8, §12) |
+| **W11** | L | **Token drift by design:** v1 said tokens.css values "become" the `@theme` block — i.e. hex values restated in two files, guaranteed to diverge on the first palette tweak. | `@theme` references the imported tokens' variables; one source of truth (§9) |
+| **W12** | L | Loose ends: font-swap CLS on a typographic hero unhandled; the identity mock is desktop-only (mobile type scale undefined); repo visibility unstated; dark mode's ongoing QA cost unacknowledged. | Fallback font metrics + mobile scale at P1; repo private until launch; dark-mode QA accepted as a cost of the DoD, noted (§9, §12) |
+
+**Pattern worth admitting:** v1's weaknesses cluster in *operations* (sequencing,
+inputs, CI, previews) rather than architecture — the same blind spot the original
+brief had (build spec strong, go-to-market weak), one level down. The v1.1 fixes
+are mostly re-sequencing, which is why P0 grew and no phase's scope changed.
