@@ -181,45 +181,79 @@ Alina's skeleton — not a fork of the lash content.
 
 ---
 
-## 9a. Design system — Direction A×C "Bold Editorial" (locked 2026-07-04)
+## 9a. Design system — "Bold Editorial", Balanced register (locked 2026-07-04)
 
-Chosen for the two stated goals: **name recognition** (from Direction C) +
-**big-money trust** (from Direction A). Tools are commoditized, so the identity
-is *not* built around them (Direction B dropped).
+Arrived at through an iterative design exploration (three broad directions →
+three A×C mixes → three signature devices → monogram refinement). The chosen
+register is **modern but moneyed** — reads as *serious money* to Polish,
+European and American audiences alike.
 
-**Thesis:** marketing pages are **bold and confident**; case studies and the log
+**Thesis:** marketing pages are modern and confident; case studies and the log
 read like a **credible research report**. Grotesque-meets-serif expresses
-"bold + trustworthy" in the type itself.
+"modern + trustworthy" in the type itself. A **navy anchor** carries the
+cross-market finance trust; a **signal-blue trendline** is the through-motif.
 
-**Color tokens** (define as CSS custom properties, theme-aware light/dark):
+### Brand mark — the K monogram
+
+An authentic **serif K (Fraunces) inside a thin ring** (status/prestige), whose
+upper arm becomes a small **area chart** — a rising line with a gradient fill,
+cresting at a plotted point that **breaks through the ring** (growth). The mark
+*is* the motif, scaled down.
+
+- **Colour:** ring + K in **navy**; the ascent fill is a **navy tonal gradient**;
+  the rising **line + endpoint point are signal-blue** (they pop).
+- **Variants:** primary (navy), reversed/on-dark (paper), mono (one colour),
+  flat (no gradient). At **≤16px the gradient drops out** for a clean favicon.
+- **Build note:** drive the gradient stops from **`currentColor`**, not a CSS
+  custom property — inside an SVG `<use>` shadow tree, `var()` on `stop-color`
+  falls back to black. (This bit us once; `currentColor` inherits correctly.)
+- Wordmark: `Kiryl.` in the grotesk, period in signal-blue (a data-point nod).
+
+### Motif — the area chart
+
+The same rising line + gradient fill + plotted endpoint, reused as: keyword
+underlines, metric cells, section dividers. Explicitly a chart (fill + baseline),
+never a bare squiggle.
+
+### Colour tokens (CSS custom properties, theme-aware)
 
 | Role | Light | Notes |
 |---|---|---|
-| `--bg` (cool paper) | `#EEF0F3` | credibility neutral, cool not cream |
-| `--surface` | `#FFFFFF` | cards / report surfaces |
-| `--ink` (text) | `#111827` | deep navy-black |
-| `--muted` | `#5B6472` | secondary text |
-| `--brand` (accent) | `#2438F2` | electric cobalt — the ownable brand color |
-| `--good` (data ↑) | `#0E7C5A` | profit-green — **data only**, never the brand accent |
-| `--bad` (data ↓) | `#C2402F` | muted red |
-| `--line` | `#DEE2E8` | hairline rules |
+| `--paper` (bg) | `#EFEEEA` | warm neutral — moneyed, not cream |
+| `--surface` | `#FBFAF6` | cards / report surfaces |
+| `--ink` (text) | `#191B22` | near-black |
+| `--muted` | `#62636B` | secondary text |
+| `--navy` (brand) | `#22407A` | anchor — cross-market finance trust |
+| `--signal` (trendline) | `#2E6BE6` | the motif/accent line + point |
+| `--good` (data ↑) | `#2F6B4E` | data only, never the brand accent |
+| `--brand-line` | `#DEDBD2` | hairline rules |
 
-Dark: `--bg #0B0D12`, `--surface #14171E`, `--ink→text #EDEFF4`,
-`--brand #6D82FF`, `--good #3FB57F`, `--muted #98A0AE`, `--line #232833`.
-(Give the accent + semantic colors real contrast on both grounds — don't invert.)
+Dark: `--paper #0B0D12`, `--surface #14171E`, `--ink→text #EDEFF4`,
+`--navy→#8FA0FF`, `--signal #6D82FF`, `--good #3FB57F`, lines `#232833`.
+(Give real contrast on both grounds — don't naively invert.)
 
-**Type roles** (inline as `@font-face` data URIs — CSP blocks font CDNs):
+### Type roles (inline as `@font-face` data URIs — CSP blocks font CDNs)
 
-| Role | Face (candidates) | Use |
+Fonts chosen & test-embedded (SIL OFL, latin subsets ~18–23 KB each; pulled from
+`@fontsource` via npm — the CDN is egress-blocked, the npm registry is allowed):
+
+| Role | Face | Use |
 |---|---|---|
-| Display | heavy grotesque — Neue Montreal / Clash Display / General Sans | headlines, the KIRYL name |
-| Editorial | transitional serif — Source Serif / Lyon | case studies, log body, pull-quotes |
-| Body / UI | clean grotesque, regular | interface + short copy |
-| Figures | mono — IBM Plex Mono | metrics, tabular numbers (`tabular-nums`) |
+| Display | **Bricolage Grotesque** (700/800) | headlines, the `Kiryl` wordmark, structure |
+| Editorial | **Fraunces** (400/600/900 + italic) | case studies, log body, pull-quotes, the serif K, metrics |
+| Body / UI | system grotesque / Bricolage regular | interface + short copy |
+| Figures | mono (IBM Plex Mono-style) | metrics, tabular numbers (`tabular-nums`) |
+| Optional | **Anton** | reserved for future oversized statement use |
 
-**Layout:** big statement hero → editorial, rule-lined proof set in serif with
-tabular P&L numbers. Generous space. One accent, used sparingly.
-Semantic (good/warning/bad) is separate from the brand accent.
+**Layout:** confident hero → editorial, rule-lined proof set in serif with
+tabular P&L numbers. Generous space. One accent (signal-blue), used sparingly.
+Semantic green is separate from the brand.
+
+**Optional add-ons** (available, not in the core identity): a gold **"audited
+results" seal** for case-study pages; a **metrics ticker** homepage band.
+
+**Ships:** logo lockups (SVG), favicon set (16/32/180/512 + `.ico` + maskable),
+the area-chart motif as a reusable component, tokens wired as CSS variables.
 
 ---
 
@@ -232,11 +266,15 @@ Semantic (good/warning/bad) is separate from the brand accent.
    taken. *Purchase pending user action.*
 3. **Contact channels** — **email · WhatsApp · LinkedIn.**
 4. **AI features** — **none**; all tools client-side → fully static site.
-5. **Brand look** — **Direction A×C "Bold Editorial"** (locked): C's bold
-   personal-brand identity + A's research-report credibility. See §9a.
+5. **Brand look** — **"Bold Editorial", Balanced register** (locked): navy anchor,
+   Bricolage Grotesque + Fraunces, K-monogram + area-chart motif. See §9a.
 6. **Launch scope / tools** — **migrate one-by-one, rebuilding as needed**;
    phase them in rather than all-at-once.
 7. **Testimonials & cases** — **anonymized.**
+8. **Fonts** — **Bricolage Grotesque + Fraunces** (+ Anton reserved); embedded
+   via `@fontsource`/npm as data URIs.
+9. **Brand mark** — K-in-ring serif monogram with the breakthrough area-chart
+   ascent; navy fill + signal-blue line. Asset: `docs/brand/kiryl-mark.svg`.
 
 **Still open:**
 
@@ -244,8 +282,6 @@ Semantic (good/warning/bad) is separate from the brand accent.
 - **B. Tool migration order** — which of the 4 goes first?
 - **C. Contact details** — actual email address, WhatsApp number, LinkedIn URL
   for `lib/config.ts`.
-- **D. Production fonts** — confirm the grotesque + serif pairing (§9a) so we can
-  inline them as `@font-face` data URIs (CSP blocks font CDNs).
 
 ---
 
