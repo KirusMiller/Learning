@@ -160,3 +160,91 @@ Home, Cases, Tools (4 client-side calculators), Blog ("Log"), About, Contact.
 - **Contact details:** real email, WhatsApp number, LinkedIn URL for `lib/config.ts`.
 - **Tool order:** which of the 4 tools to migrate first.
 - **Tool source:** GitHub-export/URLs for the Lovable + AI Studio tools when ready.
+
+---
+
+## 9. Risks & weaknesses (recorded on purpose — weigh before/while building)
+
+Honest assessment. None is a blocker; several change *what "done" should mean*.
+Severity is rough (H/M/L). Fable: surface these in the plan, don't silently paper
+over them.
+
+### 9.1 Idea-level (strategic — the user's call)
+
+- **[H] Distribution gap — the site is the *close*, not the *reach*.** PPC clients
+  arrive via referrals, LinkedIn, marketplaces and seller communities, then check
+  the site to vet you. A portfolio doesn't *create* awareness (the stated #1 goal)
+  on its own. → The site must *support* a channel (LinkedIn is the obvious lever for
+  these audiences), not replace it. Needs a distribution plan the current scope lacks.
+- **[H] Trilingual content is a permanent treadmill.** EN/RU/PL = 3× every post and
+  case, with PPC jargon that's hard to translate well. The reuse gives the machinery,
+  not the content. Likely failure mode: a "Log" that launches with 2 posts and goes
+  stale — worse than none, and it undercuts the "big-money trust" register. →
+  Consider **EN-first**, add RU/PL once cadence is proven.
+- **[M-H] Free tools are commoditized *and* a liability.** "Everyone has tools."
+  Beyond weak differentiation: a wrong number, or breakage when Amazon changes report
+  formats, damages credibility — the opposite of intent. They're also perpetual
+  maintenance. → Treat as supporting proof-of-competence, not the hook; add input
+  validation + "report format as of <date>" notes; keep each tool's math reviewable.
+- **[M-H] Anonymized cases are weak proof.** "A DE brand: 41%→24%" is unverifiable;
+  the "audited results" seal is a claim, not evidence. Sophisticated buyers discount
+  anonymous metrics. → One **named/verifiable** client (logo or quote) outweighs ten
+  anonymous stats; pursue at least one.
+- **[M] Four audiences, one site = dilution.** Polish peers/agencies (depth,
+  subcontracting) vs. EU/US brands (results, polish) vs. RU sellers (native trust)
+  want different things; copy serving all four may resonate with none. → Lead with
+  one primary audience; treat others as secondary paths.
+- **[L-M] Russian-language business content** can carry perception/payment friction
+  with some Western clients in the current climate. → A conscious choice, not an
+  accident; keep RU content walled to its locale.
+- **[L-M] A first-name personal brand ("Kiryl") is diffuse to own/rank** (common name,
+  `.com`/`.io` already taken). → `kirylppc.com` + consistent "Kiryl = Amazon PPC"
+  repetition helps; don't expect to rank the bare name quickly.
+
+### 9.2 Plan-level
+
+- **[H] No growth/content strategy.** The plan is a build spec — no editorial
+  calendar, SEO topic map, tool-discovery path, or distribution. For an awareness
+  goal that's the missing half. → Add a "Distribution & content" section + a launch
+  content count.
+- **[M] Static-export vs. lead-capture tension.** "Fully static, no server" conflicts
+  with "tools as lead magnets with email capture." → Reconcile explicitly: a
+  third-party form/ESP embed (Formspree/ConvertKit/etc.) keeps it static; decide the
+  provider before building the tools.
+- **[M] Tool migration is under-scoped.** The Lovable/AI Studio tools are **unseen**;
+  "drop-in React" is optimistic (generated code, shadcn deps, Vite→App-Router routing,
+  CSV-parsing libs, state). Each may be a real port. → Budget per-tool; audit each
+  before committing an estimate.
+- **[M] Case data model assumes clean before/after.** Real PPC results are messy
+  (seasonality, attribution, external factors). Too-neat "41→24%" invites skepticism
+  or misrepresents. → Allow context/caveats fields; frame honestly.
+- **[M] Maintenance/ownership burden.** A solo, possibly non-dev owner maintaining
+  Next + MDX + 4 tools + i18n + CI validators is non-trivial; routine edits may need
+  dev help. → Keep content in markdown/config; document a simple edit workflow; keep
+  tools' surface small.
+- **[M] No definition of done.** Phases but no acceptance criteria, launch content
+  counts, or performance/SEO/a11y targets. → Add DoD per phase (e.g. Lighthouse ≥90,
+  N seed posts, ≥2 cases, hreflang validated).
+- **[L] Over-investment in identity vs. substance.** Many rounds on the mark; the
+  About credibility, real case data and distribution are what convert. → Rebalance
+  effort toward proof + content now that the identity is locked.
+
+### 9.3 Execution / handoff-level
+
+- **[Resolved] Ephemeral design assets** — fonts/tokens/reference now committed to
+  `docs/brand/` (no dependency on the private artifact). ✔
+- **[M] New repo is unspecified** — name, owner, and *who creates it* aren't defined;
+  Fable will stall here. → User to name the repo (e.g. `kirusmiller/kirylppc`) before
+  scaffolding.
+- **[M] Planning docs are orphaned** in the `KirusMiller/Learning` (Java) repo on a
+  feature branch. If that branch/PR is merged or deleted, the source of truth moves. →
+  On repo creation, copy `docs/ppc-portfolio-plan.md`, `docs/fable5-handoff.md` and
+  `docs/brand/` into the new repo as its canonical home.
+- **[L-M] Reference repo (`kirusmiller/bb`) access + drift** — assumes Fable can
+  `add_repo` it; it may also evolve after this snapshot. → Confirm access first; treat
+  bb as a pattern reference, not a version-pinned dependency.
+- **[L] Mark depends on Fraunces** — `kiryl-mark.svg` sets the `K` as `<text>`. →
+  Outline it to a `<path>` for production (noted in `docs/brand/README.md`).
+- **[Info gap] Unseen substance** — we never inspected the actual tools, the real case
+  data, or Kiryl's credentials/experience for the About page. The plan can't specify
+  what it hasn't seen; these arrive from the user during the relevant phases.
